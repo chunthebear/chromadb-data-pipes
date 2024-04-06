@@ -21,6 +21,7 @@ hf_commands = typer.Typer()
 class HFImportRequest(BaseModel):
     dataset: Union[str, Dataset]
     split: Optional[str] = Field("train", description="The Hugging Face dataset split")
+    lang: Optional[str] = Field(None, description="The language of the dataset")
     stream: Optional[bool] = Field(
         False, description="Stream dataset instead of downloading."
     )
@@ -187,6 +188,7 @@ class HFImportUri(BaseModel):
         limit = int_or_none(query_params.get("limit", [None])[0])
         offset = int_or_none(query_params.get("offset", [None])[0])
         split = query_params.get("split", [None])[0]
+        lang = query_params.get("lang", [None])[0]
         stream = bool_or_false(query_params.get("stream", [False])[0])
         id_feature = query_params.get("id_feature", [None])[0]
         doc_feature = query_params.get("doc_feature", [None])[0]
@@ -201,6 +203,7 @@ class HFImportUri(BaseModel):
             limit=limit,
             offset=offset,
             split=split,
+            lang=lang,
             stream=stream,
             id_feature=id_feature,
             doc_feature=doc_feature,
