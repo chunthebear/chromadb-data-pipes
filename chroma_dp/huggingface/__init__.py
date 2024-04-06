@@ -67,6 +67,7 @@ class HFChromaDocumentSourceGenerator(
                 import_request.dataset,
                 split=import_request.split,
                 streaming=import_request.stream,
+                lang=import_request.lang,
             )
         else:
             self._dataset = import_request.dataset
