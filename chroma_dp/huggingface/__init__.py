@@ -64,6 +64,8 @@ class HFChromaDocumentSourceGenerator(
 
     def __init__(self, import_request: HFImportRequest):
         if isinstance(import_request.dataset, str):
+            print(import_request.lang)
+
             self._dataset = load_dataset(
                 import_request.dataset,
                 import_request.lang,
