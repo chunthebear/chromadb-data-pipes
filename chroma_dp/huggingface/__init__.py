@@ -64,8 +64,6 @@ class HFChromaDocumentSourceGenerator(
 
     def __init__(self, import_request: HFImportRequest):
         if isinstance(import_request.dataset, str):
-            print(import_request.lang)
-
             self._dataset = load_dataset(
                 import_request.dataset,
                 import_request.lang,
@@ -161,6 +159,7 @@ class HFImportUri(BaseModel):
     limit: Optional[int] = None
     offset: Optional[int] = None
     split: Optional[str] = None
+    lang: Optional[str] = None
     stream: Optional[bool] = None
     id_feature: Optional[str] = None
     doc_feature: Optional[str] = None
@@ -225,6 +224,9 @@ def hf_import(
     split: Annotated[
         Optional[str], typer.Option(help="The HuggingFace dataset split")
     ] = "train",
+    lang: Annotated[
+        Optional[str], typer.Option(help="The language of the dataset")
+    ] = None,
     stream: Annotated[
         bool, typer.Option(help="Stream dataset instead of downloading.")
     ] = False,
@@ -249,6 +251,7 @@ def hf_import(
     _limit = _hf_uri.limit or limit
     _offset = _hf_uri.offset or offset
     _split = _hf_uri.split or split
+    _lang = _hf_uri.lang or lang
     _stream = _hf_uri.stream or stream
     _id_feature = _hf_uri.id_feature or id_feature
     _doc_feature = _hf_uri.doc_feature or doc_feature
@@ -259,6 +262,7 @@ def hf_import(
     import_request = HFImportRequest(
         dataset=_dataset,
         split=_split,
+        lang=_lang,
         stream=_stream,
         limit=_limit,
         offset=_offset,
