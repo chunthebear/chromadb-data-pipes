@@ -66,9 +66,10 @@ class HFChromaDocumentSourceGenerator(
         if isinstance(import_request.dataset, str):
             self._dataset = load_dataset(
                 import_request.dataset,
+                import_request.lang,
                 split=import_request.split,
                 streaming=import_request.stream,
-                lang=import_request.lang,
+                
             )
         else:
             self._dataset = import_request.dataset
