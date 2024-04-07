@@ -68,8 +68,7 @@ class HFChromaDocumentSourceGenerator(
                 import_request.dataset,
                 import_request.lang,
                 split=import_request.split,
-                streaming=import_request.stream,
-                
+                streaming=import_request.stream
             )
         else:
             self._dataset = import_request.dataset
@@ -149,7 +148,18 @@ class HFChromaDocumentSourceGenerator(
             if self._limit is not None and 0 < self._limit <= count:
                 break
 
-            yield item
+            # yield item
+            # count += 1
+            
+            # Apply the transformation
+            transformed_item = _doc_wrapper(
+                dict(zip(self._extract_features, [item[key] for key in self._extract_features])),
+                self._doc_feature,
+                self._embed_feature,
+                self._id_feature,
+                self._meta_features,
+            )
+            yield transformed_item
             count += 1
 
 
@@ -274,7 +284,6 @@ def hf_import(
     )
     gen = HFChromaDocumentSourceGenerator(import_request)
     for doc in gen:
-        print(doc)
         typer.echo(json.dumps(doc.model_dump()))
 
 
